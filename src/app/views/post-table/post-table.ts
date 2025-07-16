@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
+import { Apollo, gql } from 'apollo-angular';
 
 
-const query = `
+const query = gql`
   query MyQuery {
     allPosts {
       id
@@ -22,12 +23,12 @@ const query = `
 })
 export class PostTable implements OnInit {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private apollo: Apollo) {
 
   }
 
   ngOnInit(): void {
-    this.getPosts().subscribe({
+    /* this.getPosts().subscribe({
       next: data => {
         console.log("NEXT", data);
         
@@ -35,6 +36,15 @@ export class PostTable implements OnInit {
       error: error => {
         console.log("ERR", error);
       }
+    }); */
+
+    this.apollo.watchQuery({
+      query: query
+    }).valueChanges.subscribe((data: any) => {
+      console.log("D ",data.data);
+      console.log("E ",data.error);
+      console.log("L ",data.loading);
+      
     });
   }
 
