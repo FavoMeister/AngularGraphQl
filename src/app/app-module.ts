@@ -10,6 +10,7 @@ import { Button } from 'primeng/button';
 import { PostTable } from './views/post-table/post-table';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { GraphQLModule } from './graphql.module';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { GraphQLModule } from './graphql.module';
     AppRoutingModule,
     Button,
     HttpClientModule,
-    GraphQLModule
+    GraphQLModule,
+    TableModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

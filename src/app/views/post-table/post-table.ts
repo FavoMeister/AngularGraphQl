@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { Apollo, gql } from 'apollo-angular';
@@ -23,6 +23,9 @@ const query = gql`
 })
 export class PostTable implements OnInit {
 
+  //posts: {id: string, title: string, views: number}[] = [];
+  posts = signal<{id: string, title: string, views: number}[]>([]);
+
   constructor(private http: HttpClient, private apollo: Apollo) {
 
   }
@@ -37,14 +40,16 @@ export class PostTable implements OnInit {
         console.log("ERR", error);
       }
     }); */
-
-    this.apollo.watchQuery({
-      query: query
-    }).valueChanges.subscribe((data: any) => {
-      console.log("D ",data.data);
-      console.log("E ",data.error);
-      console.log("L ",data.loading);
-      
+    setTimeout(() => {
+      this.apollo.watchQuery({
+        query: query
+      }).valueChanges.subscribe((data: any) => {
+        this.posts.set([...data.data?.allPosts]);
+        console.log("D ",data.data);
+        console.log("E ",data.error);
+        console.log("L ",data.loading);
+        
+      });
     });
   }
 
