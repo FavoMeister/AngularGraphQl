@@ -11,6 +11,7 @@ import { PostTable } from './views/post-table/post-table';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { GraphQLModule } from './graphql.module';
 import { TableModule } from 'primeng/table';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TableModule } from 'primeng/table';
     Button,
     HttpClientModule,
     GraphQLModule,
-    TableModule
+    TableModule,
+    ProgressSpinnerModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
