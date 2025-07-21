@@ -44,17 +44,17 @@ export class PostTable implements OnInit, OnDestroy {
       }
     }); */
     this.postsQuery = this.apollo.watchQuery({
-      query: query
+      query: query,
+      //pollInterval: 5000 // refesh data every 5 seconds.
     })
     
     this.sub = this.postsQuery.valueChanges.subscribe((data: any) => {
+
+      console.log(data);
       
       this.posts.set([...data.data?.allPosts ?? []]);
 
       this.loading = data.loading;
-      console.log("D ",data.data);
-      console.log("E ",data.error);
-      console.log("L ",data.loading);
       
     });
 
