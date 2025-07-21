@@ -25,7 +25,7 @@ export class PostTable implements OnInit {
 
   //posts: {id: string, title: string, views: number}[] = [];
   posts = signal<{id: string, title: string, views: number}[]>([]);
-  loading = true;
+  loading = false;
 
   constructor(private http: HttpClient, private apollo: Apollo) {
 
@@ -44,7 +44,8 @@ export class PostTable implements OnInit {
     this.apollo.watchQuery({
       query: query
     }).valueChanges.subscribe((data: any) => {
-      this.posts.set([...data.data?.allPosts]);
+      
+      this.posts.set([...data.data?.allPosts ?? []]);
 
       this.loading = data.loading;
       console.log("D ",data.data);

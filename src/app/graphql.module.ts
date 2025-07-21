@@ -15,6 +15,6 @@ export function createApollo(): ApolloClientOptions<any> {
 }
 
 @NgModule({
-  providers: [provideApollo(createApollo)],
+  providers: [provideApollo(createApollo, {useInitialLoading: true})],
 })
 export class GraphQLModule {}
