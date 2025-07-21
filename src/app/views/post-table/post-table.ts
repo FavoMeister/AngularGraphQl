@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Observable } from 'rxjs';
-import { Apollo, gql } from 'apollo-angular';
+import { Observable, Subscription } from 'rxjs';
+import { Apollo, gql, QueryRef } from 'apollo-angular';
 
 
 const query = gql`
@@ -21,11 +21,13 @@ const query = gql`
   templateUrl: './post-table.html',
   styleUrl: './post-table.scss'
 })
-export class PostTable implements OnInit {
+export class PostTable implements OnInit, OnDestroy {
 
   //posts: {id: string, title: string, views: number}[] = [];
   posts = signal<{id: string, title: string, views: number}[]>([]);
   loading = false;
+  postsQuery!: QueryRef<any>;
+  private sub!: Subscription;
 
   constructor(private http: HttpClient, private apollo: Apollo) {
 
@@ -41,9 +43,11 @@ export class PostTable implements OnInit {
         console.log("ERR", error);
       }
     }); */
-    this.apollo.watchQuery({
+    this.postsQuery = this.apollo.watchQuery({
       query: query
-    }).valueChanges.subscribe((data: any) => {
+    })
+    
+    this.sub = this.postsQuery.valueChanges.subscribe((data: any) => {
       
       this.posts.set([...data.data?.allPosts ?? []]);
 
@@ -53,6 +57,12 @@ export class PostTable implements OnInit {
       console.log("L ",data.loading);
       
     });
+
+    /* this.apollo.query({
+      query: query
+    }).subscribe((data: any) => {
+      this.posts = data.data?.allPosts;
+    }) */
   }
 
   getPosts():Observable<any> {
@@ -61,5 +71,10 @@ export class PostTable implements OnInit {
     }
 
     return this.http.post<any>(environment.apiUrl, body)
+  }
+
+  ngOnDestroy(): void{
+    //throw new Error('Method not implemented');
+    this.sub.unsubscribe();
   }
 }
