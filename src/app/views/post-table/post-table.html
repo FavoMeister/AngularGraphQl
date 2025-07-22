@@ -13,7 +13,7 @@
             <td>{{ post.title }}</td>
             <td>{{ post.views }}</td>
             <td>
-                <p-button label="Details" (onClick)="getPost()"/>
+                <p-button label="Details" (onClick)="getPost(post.id)"/>
             </td>
         </tr>
     </ng-template>

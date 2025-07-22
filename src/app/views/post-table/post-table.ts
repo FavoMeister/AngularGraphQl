@@ -16,8 +16,8 @@ const GET_POSTS = gql`
 `;
 
 const GET_POST = gql `
-  query MyQuery {
-    Post(id: "1") {
+  query MyQuery($id: ID!) {
+    Post(id: $id) {
       id
       title
       views
@@ -56,6 +56,7 @@ export class PostTable implements OnInit, OnDestroy {
     }); */
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
+      /* variables: {...Apollo.} */
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
 
@@ -82,9 +83,10 @@ export class PostTable implements OnInit, OnDestroy {
     this.postsQuery.refetch();
   }
 
-  getPost(): void {
+  getPost(id: string): void {
     this.apollo.query({
-      query: GET_POST
+      query: GET_POST,
+      variables: { id: id}
     }).subscribe((data: any) => {
       console.log(data);
       
