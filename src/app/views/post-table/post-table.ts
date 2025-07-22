@@ -47,6 +47,8 @@ export class PostTable implements OnInit, OnDestroy {
       query: query,
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
+
+    this.postsQuery.startPolling(5000);
     
     this.sub = this.postsQuery.valueChanges.subscribe((data: any) => {
 
@@ -65,6 +67,10 @@ export class PostTable implements OnInit, OnDestroy {
     }) */
   }
 
+  refresh(): void {
+    this.postsQuery.refetch();
+  }
+
   getPosts():Observable<any> {
     const body = {
       query: query
@@ -76,5 +82,6 @@ export class PostTable implements OnInit, OnDestroy {
   ngOnDestroy(): void{
     //throw new Error('Method not implemented');
     this.sub.unsubscribe();
+    this.postsQuery.stopPolling();
   }
 }
