@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 
 
-const query = gql`
+const GET_POSTS = gql`
   query MyQuery {
     allPosts {
       id
@@ -13,7 +13,18 @@ const query = gql`
       views
     }
   }
-`
+`;
+
+const GET_POST = gql `
+  query MyQuery {
+    Post(id: "1") {
+      id
+      title
+      views
+      comment
+    }
+  }
+`;
 
 @Component({
   selector: 'app-post-table',
@@ -44,7 +55,7 @@ export class PostTable implements OnInit, OnDestroy {
       }
     }); */
     this.postsQuery = this.apollo.watchQuery({
-      query: query,
+      query: GET_POSTS,
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
 
@@ -71,9 +82,18 @@ export class PostTable implements OnInit, OnDestroy {
     this.postsQuery.refetch();
   }
 
+  getPost(): void {
+    this.apollo.query({
+      query: GET_POST
+    }).subscribe((data: any) => {
+      console.log(data);
+      
+    })
+  }
+
   getPosts():Observable<any> {
     const body = {
-      query: query
+      query: GET_POSTS
     }
 
     return this.http.post<any>(environment.apiUrl, body)

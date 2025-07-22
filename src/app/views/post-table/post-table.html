@@ -4,6 +4,7 @@
             <th>ID</th>
             <th>Title</th>
             <th>Views</th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template #body let-post>
@@ -11,10 +12,13 @@
             <td>{{ post.id }}</td>
             <td>{{ post.title }}</td>
             <td>{{ post.views }}</td>
+            <td>
+                <p-button label="Details" (onClick)="getPost()"/>
+            </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-button label="Check" (onClisck)="refresh()"/>
+<p-button label="Check" (onClick)="refresh()"/>
 
 <p-progress-spinner *ngIf="loading" ariaLabel="loading" />
