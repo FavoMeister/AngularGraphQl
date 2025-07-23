@@ -4,8 +4,28 @@ import { environment } from '../../../environments/environment.development';
 import { Observable, Subscription } from 'rxjs';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 
+type Post = {
+  id: string,
+  title: string,
+  views: number
+  comment: string
+}
 
-const GET_POSTS = gql`
+type GetPost = {
+  Post: Post
+}
+
+type GetPostVariables = {
+  id: string
+}
+
+type TablePost = Omit<Post, 'comment'>;
+
+type GetPosts = {
+  allPosts: TablePost
+}
+
+const GET_POSTS = gql<GetPosts, unknown>`
   query MyQuery {
     allPosts {
       id
@@ -15,7 +35,7 @@ const GET_POSTS = gql`
   }
 `;
 
-const GET_POST = gql `
+const GET_POST = gql <GetPost, GetPostVariables>`
   query MyQuery($id: ID!) {
     Post(id: $id) {
       id
@@ -45,15 +65,6 @@ export class PostTable implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    /* this.getPosts().subscribe({
-      next: data => {
-        console.log("NEXT", data);
-        
-      },
-      error: error => {
-        console.log("ERR", error);
-      }
-    }); */
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
       /* variables: {...Apollo.} */
@@ -62,7 +73,7 @@ export class PostTable implements OnInit, OnDestroy {
 
     this.postsQuery.startPolling(5000);
     
-    this.sub = this.postsQuery.valueChanges.subscribe((data: any) => {
+    this.sub = this.postsQuery.valueChanges.subscribe((data) => {
 
       console.log(data);
       
@@ -72,11 +83,6 @@ export class PostTable implements OnInit, OnDestroy {
       
     });
 
-    /* this.apollo.query({
-      query: query
-    }).subscribe((data: any) => {
-      this.posts = data.data?.allPosts;
-    }) */
   }
 
   refresh(): void {
@@ -86,9 +92,9 @@ export class PostTable implements OnInit, OnDestroy {
   getPost(id: string): void {
     this.apollo.query({
       query: GET_POST,
-      variables: { id: id}
-    }).subscribe((data: any) => {
-      console.log(data);
+      variables: { id: id }
+    }).subscribe((data) => {
+      console.log(data.data.Post);
       
     })
   }
