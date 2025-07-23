@@ -22,7 +22,7 @@ type GetPostVariables = {
 type TablePost = Omit<Post, 'comment'>;
 
 type GetPosts = {
-  allPosts: TablePost
+  allPosts: TablePost[]
 }
 
 const GET_POSTS = gql<GetPosts, unknown>`
@@ -57,7 +57,7 @@ export class PostTable implements OnInit, OnDestroy {
   //posts: {id: string, title: string, views: number}[] = [];
   posts = signal<{id: string, title: string, views: number}[]>([]);
   loading = false;
-  postsQuery!: QueryRef<any>;
+  postsQuery!: QueryRef<GetPosts>;
   private sub!: Subscription;
 
   constructor(private http: HttpClient, private apollo: Apollo) {
@@ -74,8 +74,6 @@ export class PostTable implements OnInit, OnDestroy {
     this.postsQuery.startPolling(5000);
     
     this.sub = this.postsQuery.valueChanges.subscribe((data) => {
-
-      console.log(data);
       
       this.posts.set([...data.data?.allPosts ?? []]);
 
