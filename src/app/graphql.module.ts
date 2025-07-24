@@ -18,7 +18,8 @@ export function createApollo(): ApolloClientOptions<any> {
   });
 
   return {
-    link: ApolloLink.from([auth, httpLink.create({ uri })]),  //httpLink.create({ uri }),
+    //link: ApolloLink.from([auth, httpLink.create({ uri, withCredentials: true })]),  //httpLink.create({ uri }),
+    link: ApolloLink.from([auth, httpLink.create({ uri })]),
     cache: new InMemoryCache(),
   };
 }
