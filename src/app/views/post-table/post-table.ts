@@ -28,6 +28,11 @@ export class PostTable implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
+      /* context: {
+        headers: {
+          auth: 'test'
+        }
+      } */
       /* variables: {...Apollo.} */
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
