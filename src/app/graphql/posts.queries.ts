@@ -7,6 +7,10 @@ export const GET_POSTS = gql<GetPosts, unknown>`
     allPosts {
       ...PostTableFields
     }
+
+    _allPostsMeta {
+      count
+    }
   }
   ${POST_TABLE_FIELDS_FRAGMENT}
 `;

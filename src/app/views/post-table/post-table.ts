@@ -19,6 +19,7 @@ export class PostTable implements OnInit, OnDestroy {
   posts = signal<{id: string, title: string, views: number}[]>([]);
   loading = false;
   postsQuery!: QueryRef<GetPosts>;
+  postsTotalCount: number = 0;
   private sub!: Subscription;
 
   constructor(private http: HttpClient, private apollo: Apollo) {
@@ -28,11 +29,6 @@ export class PostTable implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
-      /* context: {
-        headers: {
-          auth: 'test'
-        }
-      } */
       /* variables: {...Apollo.} */
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
@@ -40,8 +36,14 @@ export class PostTable implements OnInit, OnDestroy {
     this.postsQuery.startPolling(5000);
     
     this.sub = this.postsQuery.valueChanges.subscribe((data) => {
+
+      //console.log(data);
       
       this.posts.set([...data.data?.allPosts ?? []]);
+
+      if (data.data) {
+        this.postsTotalCount = data.data._allPostsMeta.count;
+      }
 
       this.loading = data.loading;
       

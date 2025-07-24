@@ -16,6 +16,11 @@ export type GetPostVariables = {
 
 export type TablePost = Omit<Post, 'comment'>;
 
+export type PostsMeta = {
+  count: number;
+}
+
 export type GetPosts = {
-  allPosts: TablePost[]
+  allPosts: TablePost[],
+  _allPostsMeta: PostsMeta
 }
