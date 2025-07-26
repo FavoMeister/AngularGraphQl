@@ -1,10 +1,10 @@
 import { gql } from 'apollo-angular';
-import { GetPost, GetPosts, GetPostVariables } from './posts.types';
+import { GetPost, GetPosts, GetPostsVariables, GetPostVariables } from './posts.types';
 import { POST_TABLE_FIELDS_FRAGMENT } from './posts.fragments';
 
-export const GET_POSTS = gql<GetPosts, unknown>`
-  query MyQuery {
-    allPosts {
+export const GET_POSTS = gql<GetPosts, GetPostsVariables>`
+  query MyQuery($perPage: Int, $page: Int) {
+    allPosts(perPage: $perPage, page: $page) {
       ...PostTableFields
     }
 

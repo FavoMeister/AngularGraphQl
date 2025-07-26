@@ -14,6 +14,11 @@ export type GetPostVariables = {
   id: string
 }
 
+export type GetPostsVariables = {
+  perPage: number;
+  page: number;
+}
+
 export type TablePost = Omit<Post, 'comment'>;
 
 export type PostsMeta = {

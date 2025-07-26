@@ -1,4 +1,14 @@
-<p-table *ngIf="posts().length > 0" [value]="posts()" [tableStyle]="{ 'min-width': '50rem' }">
+<p-table 
+    
+    [value]="posts()" 
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rowsPerPageOptions]="[2, 5, 10]"
+    [rows]="2"
+    [totalRecords]="postsTotalCount"
+    [lazy]="true"
+    (onLazyLoad)="loadPosts($event)"
+    >
     <ng-template #header>
         <tr>
             <th>ID</th>

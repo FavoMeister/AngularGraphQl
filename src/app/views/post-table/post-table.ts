@@ -4,7 +4,8 @@ import { environment } from '../../../environments/environment.development';
 import { Observable, Subscription } from 'rxjs';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { GET_POST, GET_POSTS } from '../../graphql/posts.queries';
-import { GetPosts } from '../../graphql/posts.types';
+import { GetPosts, GetPostsVariables } from '../../graphql/posts.types';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 
 @Component({
@@ -17,8 +18,9 @@ export class PostTable implements OnInit, OnDestroy {
 
   //posts: {id: string, title: string, views: number}[] = [];
   posts = signal<{id: string, title: string, views: number}[]>([]);
+  
   loading = false;
-  postsQuery!: QueryRef<GetPosts>;
+  postsQuery!: QueryRef<GetPosts, GetPostsVariables>;
   postsTotalCount: number = 0;
   private sub!: Subscription;
 
@@ -29,17 +31,18 @@ export class PostTable implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
-      /* variables: {...Apollo.} */
+      variables: {
+        perPage: 2,
+        page: 0
+      }
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
 
     this.postsQuery.startPolling(5000);
     
     this.sub = this.postsQuery.valueChanges.subscribe((data) => {
-
-      //console.log(data);
-      
-      this.posts.set([...data.data?.allPosts ?? []]);
+      console.log('Datos recibidos:', data.data?.allPosts);
+      this.posts.set(Array.isArray(data.data?.allPosts) ? data.data.allPosts : []);
 
       if (data.data) {
         this.postsTotalCount = data.data._allPostsMeta.count;
@@ -49,6 +52,18 @@ export class PostTable implements OnInit, OnDestroy {
       
     });
 
+  }
+
+  loadPosts(event: TableLazyLoadEvent){
+    const page: number = event.first! / event.rows!;
+    const size = event.rows as number;
+
+    this.postsQuery.fetchMore({
+      variables: {
+        perPage: size,
+        page: page,
+      }
+    })
   }
 
   refresh(): void {
