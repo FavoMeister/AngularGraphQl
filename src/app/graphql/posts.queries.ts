@@ -22,4 +22,5 @@ export const GET_POST = gql <GetPost, GetPostVariables>`
       comment
     }
   }
+  ${POST_TABLE_FIELDS_FRAGMENT}
 `;

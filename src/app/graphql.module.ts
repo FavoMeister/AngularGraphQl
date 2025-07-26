@@ -25,7 +25,7 @@ export function createApollo(): ApolloClientOptions<any> {
       typePolicies: {
         Query: {
           fields: {
-            allPosts: offsetLimitPagination
+            allPosts: offsetLimitPagination()
           }
         }
       }

@@ -18,7 +18,6 @@ export class PostTable implements OnInit, OnDestroy {
 
   //posts: {id: string, title: string, views: number}[] = [];
   posts = signal<{id: string, title: string, views: number}[]>([]);
-  
   loading = false;
   postsQuery!: QueryRef<GetPosts, GetPostsVariables>;
   postsTotalCount: number = 0;
@@ -37,11 +36,11 @@ export class PostTable implements OnInit, OnDestroy {
       }
       //pollInterval: 5000 // refesh data every 5 seconds.
     })
-
-    this.postsQuery.startPolling(5000);
     
     this.sub = this.postsQuery.valueChanges.subscribe((data) => {
-      console.log('Datos recibidos:', data.data?.allPosts);
+
+      //console.log(data);
+      
       this.posts.set(Array.isArray(data.data?.allPosts) ? data.data.allPosts : []);
 
       if (data.data) {
@@ -91,6 +90,6 @@ export class PostTable implements OnInit, OnDestroy {
   ngOnDestroy(): void{
     //throw new Error('Method not implemented');
     this.sub.unsubscribe();
-    this.postsQuery.stopPolling();
+    //this.postsQuery.stopPolling();
   }
 }
