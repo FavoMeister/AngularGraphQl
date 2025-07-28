@@ -5,10 +5,13 @@ import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/c
 import { environment } from '../environments/environment.development';
 import { setContext } from '@apollo/client/link/context';
 import { offsetLimitPagination } from '@apollo/client/utilities';
+import { Toast } from './core/services/toast';
+import { onError } from '@apollo/client/link/error';
 
 export function createApollo(): ApolloClientOptions<any> {
   const uri = environment.apiUrl; // <-- add the URL of the GraphQL server here
   const httpLink = inject(HttpLink);
+  const toastService = inject(Toast); // This allow us to use dependency injection to access the service outside of a traditional class-based context.
 
   const auth = setContext((operation, context) => {
     return {
@@ -18,9 +21,27 @@ export function createApollo(): ApolloClientOptions<any> {
     }
   });
 
+  const errorLink = onError(({operation, response, graphQLErrors, networkError}) => {
+    if (graphQLErrors) {
+      /* graphQLErrors.map(({message, extensions}) => {
+        console.log('[GraphQL error]', message);
+        if (extensions) {
+          
+        }
+      }) */
+     const message = graphQLErrors[0].message;
+     toastService.showError(`GraphQL Server Error ${message}`);
+    }
+
+    if (networkError) {
+      console.log('[Network error]', networkError.message);
+      toastService.showError(`Network Error, please try later ${networkError.message}`);
+    }
+  });
+
   return {
     //link: ApolloLink.from([auth, httpLink.create({ uri, withCredentials: true })]),  //httpLink.create({ uri }),
-    link: ApolloLink.from([auth, httpLink.create({ uri })]),
+    link: ApolloLink.from([errorLink, auth, httpLink.create({ uri })]),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

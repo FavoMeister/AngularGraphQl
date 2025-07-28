@@ -76,15 +76,15 @@ export class PostTable implements OnInit, OnDestroy {
     this.apollo.query({
       query: GET_POST,
       variables: { id: id },
-      errorPolicy: 'all' // none, ignore and all
+      //errorPolicy: 'all' // none, ignore and all
     }).subscribe({
       next: (data) => {
         console.log(data);
       },
-      error: (error) => {
+      /* error: (error) => {
         console.log('error', error);
         this.toastService.showError('Error occured please try again later.');
-      }
+      } */
     })
   }
 
