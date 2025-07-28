@@ -20,7 +20,6 @@ export const GET_POST = gql <GetPost, GetPostVariables>`
     Post(id: $id) {
       ...PostTableFields
       comment
-      test
     }
   }
   ${POST_TABLE_FIELDS_FRAGMENT}

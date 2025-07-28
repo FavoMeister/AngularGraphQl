@@ -43,6 +43,8 @@ export function createApollo(): ApolloClientOptions<any> {
     //link: ApolloLink.from([auth, httpLink.create({ uri, withCredentials: true })]),  //httpLink.create({ uri }),
     link: ApolloLink.from([errorLink, auth, httpLink.create({ uri })]),
     cache: new InMemoryCache({
+      addTypename: true,
+      resultCaching: true,
       typePolicies: {
         Query: {
           fields: {
