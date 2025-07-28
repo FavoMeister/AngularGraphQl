@@ -12,6 +12,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { GraphQLModule } from './graphql.module';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     HttpClientModule,
     GraphQLModule,
     TableModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ToastModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -35,8 +38,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             theme: {
                 preset: Aura
             }
-        })
+        }),
+    MessageService
   ],
+  
   bootstrap: [App]
 })
 export class AppModule { }

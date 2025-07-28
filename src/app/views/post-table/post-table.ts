@@ -6,6 +6,7 @@ import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { GET_POST, GET_POSTS } from '../../graphql/posts.queries';
 import { GetPosts, GetPostsVariables } from '../../graphql/posts.types';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { Toast } from '../../core/services/toast';
 
 
 @Component({
@@ -23,11 +24,13 @@ export class PostTable implements OnInit, OnDestroy {
   postsTotalCount: number = 0;
   private sub!: Subscription;
 
-  constructor(private http: HttpClient, private apollo: Apollo) {
+  constructor(private http: HttpClient, private apollo: Apollo, private toastService: Toast) {
 
   }
 
   ngOnInit(): void {
+
+    this.toastService.showError('Test');
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
       variables: {
