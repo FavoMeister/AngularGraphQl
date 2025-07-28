@@ -9,7 +9,7 @@ export class Toast {
   constructor(private messageService: MessageService) { }
 
   showError(message: string): void {
-    this.messageService.add({severity: 'error', summary: 'Error', detail: message, life: 2000})
+    this.messageService.add({severity: 'error', summary: 'Error', detail: message, life: 4000})
   }
 
   showSuccess(message: string): void {
@@ -17,7 +17,7 @@ export class Toast {
       severity: 'success',
       summary: 'Éxito',
       detail: message,
-      life: 2000
+      life: 4000
     });
   }
 }

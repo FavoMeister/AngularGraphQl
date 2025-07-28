@@ -30,7 +30,7 @@ export class PostTable implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.toastService.showError('Test');
+    //this.toastService.showError('Test');
     this.postsQuery = this.apollo.watchQuery({
       query: GET_POSTS,
       variables: {
@@ -75,10 +75,16 @@ export class PostTable implements OnInit, OnDestroy {
   getPost(id: string): void {
     this.apollo.query({
       query: GET_POST,
-      variables: { id: id }
-    }).subscribe((data) => {
-      console.log(data.data.Post);
-      
+      variables: { id: id },
+      errorPolicy: 'all' // none, ignore and all
+    }).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (error) => {
+        console.log('error', error);
+        this.toastService.showError('Error occured please try again later.');
+      }
     })
   }
 
