@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable, Subscription } from 'rxjs';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
-import { GET_POST, GET_POSTS } from '../../graphql/posts.queries';
+import { DELETE_POST, GET_POST, GET_POSTS } from '../../graphql/posts.queries';
 import { GetPosts, GetPostsVariables } from '../../graphql/posts.types';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { Toast } from '../../core/services/toast';
@@ -86,6 +86,25 @@ export class PostTable implements OnInit, OnDestroy {
         this.toastService.showError('Error occured please try again later.');
       } */
     })
+  }
+
+  deletePost(id: string) {
+    this.apollo.mutate({
+      mutation: DELETE_POST,
+      variables: {
+        id: id
+      },
+      /* refetchQueries: [
+        {
+          query: GET_POSTS,
+          variables: {
+            perPage... page...
+          }
+        }
+      ] */
+    }).subscribe(({data}) => {
+      this.refresh()
+    });
   }
 
   getPosts():Observable<any> {

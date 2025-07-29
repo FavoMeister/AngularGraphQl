@@ -24,6 +24,7 @@
             <td>{{ post.views }}</td>
             <td>
                 <p-button label="Details" (onClick)="getPost(post.id)"/>
+                <p-button class="ml-3" label="Delete" severity="danger" (onClick)="deletePost(post.id)"/>
             </td>
         </tr>
     </ng-template>

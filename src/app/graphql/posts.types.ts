@@ -29,3 +29,11 @@ export type GetPosts = {
   allPosts: TablePost[],
   _allPostsMeta: PostsMeta
 }
+
+export type DeletePost = {
+  deletePost: TablePost;
+}
+
+export type DeletePostVariables = {
+  id: string
+}
