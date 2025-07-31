@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Observable, Subscription } from 'rxjs';
+import { count, Observable, Subscription } from 'rxjs';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { DELETE_POST, GET_POST, GET_POSTS } from '../../graphql/posts.queries';
 import { GetPosts, GetPostsVariables } from '../../graphql/posts.types';
-import { TableLazyLoadEvent } from 'primeng/table';
+import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { Toast } from '../../core/services/toast';
 
 
@@ -23,6 +23,8 @@ export class PostTable implements OnInit, OnDestroy {
   postsQuery!: QueryRef<GetPosts, GetPostsVariables>;
   postsTotalCount: number = 0;
   private sub!: Subscription;
+
+  @ViewChild('postsTable') postsTable!: Table; // Allows you to grab a reference to a DOM element or a child component inside your template
 
   constructor(private http: HttpClient, private apollo: Apollo, private toastService: Toast) {
 
@@ -94,6 +96,39 @@ export class PostTable implements OnInit, OnDestroy {
       variables: {
         id: id
       },
+      update: (cache, { data }) => {
+        const page = this.postsTable.first! / this.postsTable.rows!;
+        const size = this.postsTable.rows as number;
+
+        const existingData: any = cache.readQuery({
+          query: GET_POSTS,
+          variables: {
+            perPage: size,
+            page: page
+          }
+        });
+
+        const newPosts = existingData.allPosts.filter(
+          (post: any) => post.id !== id
+        )
+        console.log('newPosts', newPosts);
+
+        cache.writeQuery({
+          query: GET_POSTS,
+          variables: {
+            perPage: size,
+            page: page
+          },
+          data: {
+            allPosts: newPosts,
+            _allPostsMeta: {
+              ...existingData._allPostsMeta,
+              count: existingData._allPostsMeta.count -1
+            }
+          }
+        });
+        
+      }
       /* refetchQueries: [
         {
           query: GET_POSTS,
