@@ -7,3 +7,12 @@ export const POST_TABLE_FIELDS_FRAGMENT = gql `
         views
     }
 `
+
+export const POST_TABLE_FIELDS_FRAGMENTS = gql `
+    fragment PostTableFieldsComplete on Post {
+        id,
+        title,
+        views,
+        comment
+    }
+`

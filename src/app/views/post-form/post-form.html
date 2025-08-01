@@ -1,0 +1,30 @@
+<div class="mt-20">
+
+    <h2>{{ postId ? 'Edit post' : 'Create post' }}</h2>
+    <form [formGroup]="postForm">
+        <div class="mt-10">
+            <p-floatlabel variant="on">
+                <input pInputText id="title_label" [formControl]="controls.title" />
+                <label for="title_label">Title</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="mt-10">
+            <p-floatlabel variant="on">
+                <p-inputnumber inputId="views_label" [formControl]="controls.views" />
+                <label for="views_label">Views</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="mt-10">
+            <p-floatlabel variant="on">
+                <input pInputText id="comment_label" [formControl]="controls.comment" />
+                <label for="comment_label">Comment</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="mt-10">
+            <p-button label="Submit Form" (onClick)="onSubmit()" />
+        </div>
+    </form>
+</div>

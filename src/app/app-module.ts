@@ -14,11 +14,17 @@ import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { PostForm } from './views/post-form/post-form';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     App,
-    PostTable
+    PostTable,
+    PostForm
   ],
   imports: [
     BrowserModule,
@@ -28,7 +34,11 @@ import { MessageService } from 'primeng/api';
     GraphQLModule,
     TableModule,
     ProgressSpinnerModule,
-    ToastModule
+    ToastModule,
+    InputNumberModule,
+    InputTextModule,
+    FloatLabelModule,
+    ReactiveFormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

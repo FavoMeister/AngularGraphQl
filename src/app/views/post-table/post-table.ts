@@ -7,6 +7,7 @@ import { DELETE_POST, GET_POST, GET_POSTS } from '../../graphql/posts.queries';
 import { GetPosts, GetPostsVariables } from '../../graphql/posts.types';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { Toast } from '../../core/services/toast';
+import { Posts } from '../../core/services/posts';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class PostTable implements OnInit, OnDestroy {
 
   @ViewChild('postsTable') postsTable!: Table; // Allows you to grab a reference to a DOM element or a child component inside your template
 
-  constructor(private http: HttpClient, private apollo: Apollo, private toastService: Toast) {
+  constructor(private http: HttpClient, private apollo: Apollo, private toastService: Toast, private postsService: Posts) {
 
   }
 
@@ -75,11 +76,7 @@ export class PostTable implements OnInit, OnDestroy {
   }
 
   getPost(id: string): void {
-    this.apollo.query({
-      query: GET_POST,
-      variables: { id: id },
-      //errorPolicy: 'all' // none, ignore and all
-    }).subscribe({
+    this.postsService.getPost(id).subscribe({
       next: (data) => {
         console.log(data);
       },
@@ -154,5 +151,9 @@ export class PostTable implements OnInit, OnDestroy {
     //throw new Error('Method not implemented');
     this.sub.unsubscribe();
     //this.postsQuery.stopPolling();
+  }
+
+  editPost(id: string) {
+    this.postsService.postId$.next(id);
   }
 }
