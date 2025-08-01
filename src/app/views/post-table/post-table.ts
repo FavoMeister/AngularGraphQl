@@ -96,7 +96,7 @@ export class PostTable implements OnInit, OnDestroy {
       variables: {
         id: id
       },
-      update: (cache, { data }) => {
+      /*update: (cache, { data }) => {
         const page = this.postsTable.first! / this.postsTable.rows!;
         const size = this.postsTable.rows as number;
 
@@ -113,13 +113,13 @@ export class PostTable implements OnInit, OnDestroy {
         )
         console.log('newPosts', newPosts);
 
-        cache.writeQuery({
+        cache.writeQuery({ // This manually cache update Ensures that the UI immediately reflects the deletion without needing to reload data from the server
           query: GET_POSTS,
           variables: {
             perPage: size,
             page: page
           },
-          data: {
+          data: { 
             allPosts: newPosts,
             _allPostsMeta: {
               ...existingData._allPostsMeta,
@@ -128,7 +128,7 @@ export class PostTable implements OnInit, OnDestroy {
           }
         });
         
-      }
+      }*/
       /* refetchQueries: [
         {
           query: GET_POSTS,

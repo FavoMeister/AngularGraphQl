@@ -37,3 +37,24 @@ export type DeletePost = {
 export type DeletePostVariables = {
   id: string
 }
+
+export type UpdatePost = {
+  updatePost: Post
+}
+
+export type CreatePost = {
+  createPost: Post
+}
+
+export type UpdatePostVariables = {
+  id: string
+  title?: string
+  views?: number
+  comment?: string
+}
+
+export type CreatePostVariables = {
+  title: string
+  views: number
+  comment: string
+}
