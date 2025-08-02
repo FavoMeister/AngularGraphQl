@@ -24,7 +24,9 @@
         </div>
 
         <div class="mt-10">
-            <p-button label="Submit Form" (onClick)="onSubmit()" />
+            <p-button *ngIf="postId" label="Cancel Edit" severity="secondary" (onClick)="clearEdit()" />
+
+            <p-button class="ml-3" label="Submit Form" (onClick)="onSubmit()" />
         </div>
     </form>
 </div>

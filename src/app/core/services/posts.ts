@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { BehaviorSubject } from 'rxjs';
-import { GET_POST, UPDATE_POST } from '../../graphql/posts.queries';
+import { CREATE_POST, GET_POST, GET_POSTS, UPDATE_POST } from '../../graphql/posts.queries';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,26 @@ export class Posts {
         views,
         comment
       }
+    })
+  }
+
+  createPost(title: string, views: number, comment: string) {
+    return this.apollo.mutate({
+      mutation: CREATE_POST,
+      variables: {
+        title,
+        views,
+        comment
+      },
+      refetchQueries: [
+        {
+          query: GET_POSTS,
+          variables: {
+            perPage: 2,
+            page: 0
+          }
+        }
+      ]
     })
   }
 }

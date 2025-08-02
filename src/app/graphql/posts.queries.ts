@@ -55,7 +55,7 @@ export const CREATE_POST = gql <CreatePost, CreatePostVariables>`
       comment
     }
   }
-  ${POST_TABLE_FIELDS_FRAGMENTS}
+
 `
 
 export const DELETE_POST = gql <DeletePost, DeletePostVariables> `

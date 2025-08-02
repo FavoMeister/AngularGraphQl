@@ -66,5 +66,11 @@ export class PostForm implements OnInit, OnDestroy{
 
       return;
     }
+
+    this.postsService.createPost(title as string, views as number, comment as string).subscribe()
+  }
+
+  clearEdit() {
+    this.postsService.postId$.next(null);
   }
 }
