@@ -1,12 +1,15 @@
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { inject, NgModule, Query } from '@angular/core';
-import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
+import { ApolloClientOptions, ApolloLink, InMemoryCache, split } from '@apollo/client/core';
 import { environment } from '../environments/environment.development';
 import { setContext } from '@apollo/client/link/context';
-import { offsetLimitPagination } from '@apollo/client/utilities';
+import { getMainDefinition, offsetLimitPagination } from '@apollo/client/utilities';
 import { Toast } from './core/services/toast';
 import { onError } from '@apollo/client/link/error';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+import { Kind, OperationTypeNode } from 'graphql';
 
 export function createApollo(): ApolloClientOptions<any> {
   const uri = environment.apiUrl; // <-- add the URL of the GraphQL server here
@@ -38,6 +41,27 @@ export function createApollo(): ApolloClientOptions<any> {
       toastService.showError(`Network Error, please try later ${networkError.message}`);
     }
   });
+
+  const http = httpLink.create({ uri });
+
+  const ws = new GraphQLWsLink(
+    createClient({
+      url: environment.wsUrl
+    })
+  )
+
+  const link = split(
+    ({query}) => {
+      const definition = getMainDefinition(query);
+
+      return (
+        definition.kind == Kind.OPERATION_DEFINITION &&
+          definition.operation == OperationTypeNode.SUBSCRIPTION
+      )
+    },
+    ws,
+    http
+  );
 
   return {
     //link: ApolloLink.from([auth, httpLink.create({ uri, withCredentials: true })]),  //httpLink.create({ uri }),
